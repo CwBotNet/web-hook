@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "hono": "^4.3.11",
+    "twitter-api-v2": "^1.17.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240403.0",
+    "wrangler": "^3.47.0"
+  }
+}
