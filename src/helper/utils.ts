@@ -16,4 +16,15 @@ export function base64UrlEncode(arrayBuffer: ArrayBuffer) {
     .replace(/=+$/, "");
 }
 
+export const generateCodeVerifier = () => {
+  const array = new Uint32Array(56 / 2);
+  crypto.getRandomValues(array);
+  return Array.from(array, (dec) => ("0" + dec.toString(16)).substr(-2)).join(
+    ""
+  );
+};
 
+export const generateCodeChallenge = async (verifier: string) => {
+  const hashed = await sha256(verifier);
+  return base64UrlEncode(hashed);
+};
