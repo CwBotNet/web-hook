@@ -8,8 +8,7 @@ import {
 require("dotenv").config();
 
 // Define the environment interface
-interface Env {
-  AUTH_KV: KVNamespace;
+type Env = {
   TWITTER_API_BASE: string;
   CLIENT_ID: string;
   CLIENT_SECRET: string;
@@ -19,17 +18,22 @@ interface Env {
   state_kv: KVNamespace;
   codeVerifire_kv: KVNamespace;
   [key: string]: KVNamespace | string;
-}
+};
 
 // Create the Hono app with the environment interface
 const app = new Hono<{ Bindings: Env }>();
 
 /*------------------root-------------------*/
+
 app.get("/", ...healthCheckHandler);
 
 /*------------------auth-------------------*/
 
 app.get("/oAuth2", ...xSetupHandler);
+
+/*------------------callback-------------------*/
+
+app.get("/callback", ...XCallbackHandler);
 
 // app.get("/auth", async (c) => {
 //   // const verifier = generateCodeVerifier();
@@ -46,8 +50,5 @@ app.get("/oAuth2", ...xSetupHandler);
 //   const authUrl = `${TWITTER_API_BASE}/2/oauth2/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=tweet.read%20users.read%20follows.read%20follows.write&state=${state}&code_challenge=${challenge}&code_challenge_method=S256`;
 //   return c.redirect(authUrl);
 // });
-
-/*------------------callback-------------------*/
-app.get("/callback", ...twitterOauth2CallbackHandler);
 
 export default app;
